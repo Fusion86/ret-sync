@@ -55,6 +55,19 @@ public class DebuggerDialects {
                     entry("hbp1", "thb *")
                     ));
 
+    private static final HashMap<String, String> MCD_DIALECT = new HashMap<String, String>(
+            Map.ofEntries(
+                    entry("prefix", "prefix"),
+                    entry("si", "si"),
+                    entry("so", "so"),
+                    entry("go", "go"),
+                    entry("run", "run"),
+                    entry("bp", "bp "),
+                    entry("hbp", "hbp "),
+                    entry("bp1", "bp1 "),
+                    entry("hbp1", "hbp1 ")
+                    ));
+
     private static final HashMap<String, String> LLDB_DIALECT = new HashMap<String, String>(
             Map.ofEntries(
                     entry("prefix", ""),
@@ -97,6 +110,7 @@ public class DebuggerDialects {
             Map.ofEntries(
                     entry("windbg", WINDBG_DIALECT),
                     entry("gdb", GDB_DIALECT),
+                    entry("mcd", MCD_DIALECT),
                     entry("lldb", LLDB_DIALECT),
                     entry("ollydbg2", OLLYDBG_DIALECT),
                     entry("x64_dbg", X64DBG_DIALECT)
