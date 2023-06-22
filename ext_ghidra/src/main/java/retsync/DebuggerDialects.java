@@ -65,7 +65,8 @@ public class DebuggerDialects {
                     entry("bp", "bp "),
                     entry("hbp", "hbp "),
                     entry("bp1", "bp1 "),
-                    entry("hbp1", "hbp1 ")
+                    entry("hbp1", "hbp1 "),
+                    entry("j", "j")
                     ));
 
     private static final HashMap<String, String> LLDB_DIALECT = new HashMap<String, String>(

@@ -72,6 +72,7 @@ public class RetSyncComponent extends ComponentProvider {
     private NavigatableContextAction action_bp1;
     private NavigatableContextAction action_hbp;
     private NavigatableContextAction action_hbp1;
+    private NavigatableContextAction action_jump;
     private NavigatableContextAction action_translate;
     private NavigatableContextAction action_reload_conf;
 
@@ -248,6 +249,28 @@ public class RetSyncComponent extends ComponentProvider {
             }
         };
 
+        action_jump = new NavigatableContextAction("ret-sync jump", getName()) {
+            @Override
+            public void actionPerformed(NavigatableActionContext context) {
+                rsplugin.cs.println(String.format("[>] %s", this.getName()));
+
+                if (rsplugin.syncEnabled) {
+                    ProgramLocation loc = rsplugin.cvs.getCurrentLocation();
+                    Program pgm = loc.getProgram();
+
+                    if (rsplugin.isRemoteBaseKnown()) {
+                        Address dest = rsplugin.rebaseRemote(loc.getAddress());
+                        rsplugin.reqHandler.curClient.sendCmd("j", String.format("0x%x", dest.getOffset()), false);
+                        rsplugin.cs.println(String.format("    local addr: %s, remote: 0x%x",
+                                loc.getAddress().toString(), dest.getOffset()));
+                    } else {
+                        rsplugin.cs.println(
+                                String.format("[x] %s failed, remote base of %s program unknown", this.getName(), pgm.getName()));
+                    }
+                }
+            }
+        };
+
         action_reload_conf = new NavigatableContextAction("ret-sync reload conf", getName()) {
             @Override
             public void actionPerformed(NavigatableActionContext context) {
@@ -291,6 +314,11 @@ public class RetSyncComponent extends ComponentProvider {
                 new KeyBindingData(KeyEvent.VK_F3, InputEvent.CTRL_DOWN_MASK));
         action_hbp1.setDescription("Set one-shot hardware breakpoint");
         dockingTool.addAction(action_hbp1);
+
+        action_jump.setEnabled(true);
+        action_jump.markHelpUnnecessary();
+        action_jump.setKeyBindingData(new KeyBindingData(KeyEvent.VK_F6, 0));
+        dockingTool.addAction(action_jump);
 
         action_translate.setEnabled(true);
         action_translate.markHelpUnnecessary();
